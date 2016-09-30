@@ -13,7 +13,7 @@ def auth():
     print request.form
     print request.form["user"]
     print request.form["password"]
-    return "ok then"
+    return render_template("results.html",result="SUCCESS!!!")
 
 if __name__ == '__main__':
     ramirez.debug = True
