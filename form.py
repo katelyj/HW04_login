@@ -25,6 +25,7 @@ def check(user,password):
     for i in DATA:
 	if user == i[0]:
 	    if i[1] == hash(password):
+                session[i[1]] = password
 		return "Success!"
 	    return "You went wrong there, hun."
     return "Have you even registered?"
@@ -35,18 +36,30 @@ def home():
     #print request headers
     print url_for('home')
     print url_for('auth')
-    return render_template("form.html",result="Write whatever comes to your heart...")
+    return render_template("form.html",result="Write whatever comes to your heart.",currentUser="")
 
 @ramirez.route("/authenticate/", methods=['GET','POST'])
 def auth():
+    
     inp = request.form
     user = inp['user']
     password = inp['password']
-    if inp['s'] == "Register":
+    
+    if inp['s'] == "Register": #register
 	m = register(user,password)
-    else:
+        return render_template("form.html",result=m,currentUser="")
+    
+    if inp['s'] == "Login": #login
         m = check(user,password)
-    return render_template("form.html",result=m)
+        if m == "Success!":
+            c = "Current User: " + user
+        else:
+            c = ""
+        return render_template("form.html",result=m,currentUser=c)
+    
+    else: #logout, most likely
+        #session.pop(password)
+        return render_template("form.html",result="Write whatever your heart desires.",currentUser="")
 
 if __name__ == '__main__':
     ramirez.debug = True
