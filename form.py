@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, url_for
 import hashlib
 import csv
 
 ramirez = Flask(__name__)
+ramirez.secret_key = "fhruvhsfjkghdjhjdf"
 
 def hash(s):
     p = hashlib.sha1()
@@ -31,6 +32,9 @@ def check(user,password):
 @ramirez.route("/")
 @ramirez.route("/login/")
 def home():
+    #print request headers
+    print url_for('home')
+    print url_for('auth')
     return render_template("form.html")
 
 @ramirez.route("/authenticate/", methods=['GET','POST'])
